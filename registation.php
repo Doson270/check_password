@@ -23,19 +23,18 @@ if (empty($name)) {
     elseif (!filter_var($email , FILTER_VALIDATE_EMAIL)) {
         $validmessage[] = "E-mail incorrecte";
     }
-    if (!empty($password)) {
+    if (empty($password)) {
         $validmessage[] = "Veuillez saisir un mot de passe valide";
     }
-    elseif (strln($password)< 10){
+    elseif (strlen($password)< 10){
         $validmessage[] = "Mot de passe trop court";
 
     }
-    elseif ($password !== $confirmpassword)
+    elseif ($password !== $confirmpassword){
         $validmessage[] = "Les mots de passes de correspendent pas";
-        
-}
-
+    }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,9 +61,12 @@ if (empty($name)) {
 
             <input type="submit" value="valider">
 
-            <span class="span"><?= $validmessage ?></span>
+            <?php foreach ($validmessage as $message){?>
+            <span class="span"><?php echo $message ?></span>
 
         </form>
     </section>
 </body>
 </html>
+<?php
+}}; 
