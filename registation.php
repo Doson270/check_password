@@ -1,5 +1,5 @@
 <?php
-$validmessage = "";
+$validmessage = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = htmlspecialchars(trim($_POST["name"] ?? ""));
@@ -9,20 +9,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 if (empty($name)) {
-    $validmessage = "verifier les informations";
+    $validmessage[] = "verifier les informations";
 }
     elseif (strlen($name) < 5) {
-    $validmessage = "mot de passe trop court";
+    $validmessage[] = "mot de passe trop court";
     }
     elseif (strlen($name) > 55) { 
-    $validmessage = "Maximum 55 caractere";
+    $validmessage[] = "Maximum 55 caractere";
     }
     if (empty($email)) {
-        $validmessage = "Veuillez remplir votre E-mail";
+        $validmessage[] = "Veuillez remplir votre E-mail";
     }
     elseif (!filter_var($email , FILTER_VALIDATE_EMAIL)) {
-        $validmessage = "E-mail incorrecte";
+        $validmessage[] = "E-mail incorrecte";
     }
+    if (!empty($password)) {
+        $validmessage[] = "Veuillez saisir un mot de passe valide";
+    }
+    elseif (strln($password)< 10){
+        $validmessage[] = "Mot de passe trop court";
+
+    }
+    elseif ($password !== $confirmpassword)
+        $validmessage[] = "Les mots de passes de correspendent pas";
+        
 }
 
 ?>
