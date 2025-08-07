@@ -1,15 +1,17 @@
 <?php
+
+
 // logique de connexion a la BBD
 
 // information pour ce connecter
 // l'endroit ou est ma BDD
 $host = "localhost";
 // le nom de la BDD
-$dbname = "seconddb";
+$dbname = "registration";
 // identifiant de connection
 $username = "root";
 // mdp de connexion
-$password = "";
+$password = ""; 
 // port
 $port = 3306;
 // encodage
@@ -42,4 +44,17 @@ function dbConnexion() {
         die("Error 404". $e->getMessage());
     }   
 }
-dbConnexion();
+if (empty($errors)) {
+    $pdo = dbConnexion();
+
+
+// verifier si l'email est utilisé ou non 
+$checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+
+$checkEmail->execute($email);
+// une fonction pour verifier si je recupere quelque chose
+if ($checkEmail->rowcount() > 0){ 
+    $errors[] = "email deja validé"
+}else{
+    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+}};
