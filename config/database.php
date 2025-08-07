@@ -1,15 +1,17 @@
 <?php
+
+
 // logique de connexion a la BBD
 
 // information pour ce connecter
 // l'endroit ou est ma BDD
 $host = "localhost";
 // le nom de la BDD
-$dbname = "users_db";
+$dbname = "registration";
 // identifiant de connection
 $username = "root";
 // mdp de connexion
-$password = "";
+$password = ""; 
 // port
 $port = 3306;
 // encodage
@@ -28,7 +30,7 @@ function dbConnexion() {
         // je creer mon objet de connexion
         // Je creer un objet "pdo = newpdo" et je lui injecte les information
         //  que je souhhaite et je lui modifie un attribut avec set attribut
-        $pdo = new PDO($dsn, $username, $password)
+        $pdo = new PDO($dsn, $username, $password);
         // comment recuperer les données
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // comment me renvoyer les données
@@ -36,9 +38,23 @@ function dbConnexion() {
         // une fois que la connexion est effectué il me renvoie ma connexion
         return $pdo;
 // le catch va gerer mes erreurs
-    } catch (PDOExeption $e) {
+    } catch (PDOException $e) {
         // si un probleme est detecté on dit d'arreter la lecture du code avec die 
         // et de me renvoyer l'erreur qui ce trouve dans $e
-        die("Error 404". $e-> etMessage());
+        die("Error 404". $e->getMessage());
     }   
 }
+if (empty($errors)) {
+    $pdo = dbConnexion();
+
+
+// verifier si l'email est utilisé ou non 
+$checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+
+$checkEmail->execute($email);
+// une fonction pour verifier si je recupere quelque chose
+if ($checkEmail->rowcount() > 0){ 
+    $errors[] = "email deja validé"
+}else{
+    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+}};

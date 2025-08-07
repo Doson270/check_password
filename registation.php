@@ -1,6 +1,6 @@
 <?php
 $validmessage = [];
-
+require_once "config/database.php";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = htmlspecialchars(trim($_POST["name"] ?? ""));
     $email = htmlspecialchars(trim($_POST["email"]?? ""));
@@ -33,6 +33,7 @@ if (empty($name)) {
     elseif ($password !== $confirmpassword){
         $validmessage[] = "Les mots de passes de correspendent pas";
     }
+}
 ?>
 
 
@@ -48,7 +49,7 @@ if (empty($name)) {
     <section>
         <form action="" method="POST">
             <label for="name">Name</label>
-            <input type="name" name="name" id="name" required>
+            <input type="text" name="name" id="name" required>
 
             <label for="email">Email</label>
             <input type="email" name="email" id="email" required>
@@ -60,13 +61,13 @@ if (empty($name)) {
             <input type="password" name="confirmpassword" id="confirmpassword">
 
             <input type="submit" value="valider">
-
+        </form>
             <?php foreach ($validmessage as $message){?>
             <span class="span"><?php echo $message ?></span>
 
-        </form>
+        
     </section>
 </body>
 </html>
 <?php
-}}; 
+}; 
