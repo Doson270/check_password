@@ -3,6 +3,8 @@
 
 // logique de connexion a la BBD
 
+// fonction qui creer et renvoie une connexion a la BDD
+function dbConnexion() {
 // information pour ce connecter
 // l'endroit ou est ma BDD
 $host = "localhost";
@@ -17,10 +19,8 @@ $port = 3306;
 // encodage
 $charset = "utf8mb4";
 
-// fonction qui creer et renvoie une connexion a la BDD
-function dbConnexion() {
-// transforme mes variables en global (accessible partout)
-    global $host, $dbname, $username, $password, $port, $charset;
+
+// transforme mes variables en global (accessible partout)    global $host, $dbname, $username, $password, $port, $charset;
 // je creer un try et un catch pour pouvoir tester ma ligne de code 
 // qui contient mes information pour pouvoir me connecter a ma BDD 
 // et si elle ne fonctionne pas on peut renvoyer une ligne de code sur pour pas que sa plant
@@ -44,17 +44,7 @@ function dbConnexion() {
         die("Error 404". $e->getMessage());
     }   
 }
-if (empty($errors)) {
-    $pdo = dbConnexion();
 
 
-// verifier si l'email est utilisé ou non 
-$checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
 
-$checkEmail->execute($email);
-// une fonction pour verifier si je recupere quelque chose
-if ($checkEmail->rowcount() > 0){ 
-    $errors[] = "email deja validé"
-}else{
-    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-}};
+ 
