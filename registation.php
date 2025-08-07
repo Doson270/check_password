@@ -2,19 +2,19 @@
 $validmessage = [];
 require_once "config/database.php";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = htmlspecialchars(trim($_POST["name"] ?? ""));
+    $username = htmlspecialchars(trim($_POST["username"] ?? ""));
     $email = htmlspecialchars(trim($_POST["email"]?? ""));
     $password = $_POST["password"] ?? "";
     $confirmpassword = $_POST["confirmpassword"] ?? "";
 
 
-if (empty($name)) {
+if (empty($username)) {
     $validmessage[] = "verifier les informations";
 }
-    elseif (strlen($name) < 5) {
+    elseif (strlen($username) < 5) {
     $validmessage[] = "mot de passe trop court";
     }
-    elseif (strlen($name) > 55) { 
+    elseif (strlen($username) > 55) { 
     $validmessage[] = "Maximum 55 caractere";
     }
     if (empty($email)) {
@@ -33,7 +33,29 @@ if (empty($name)) {
     elseif ($password !== $confirmpassword){
         $validmessage[] = "Les mots de passes de correspendent pas";
     }
-}
+
+$errors = []; 
+if (empty($errors)) {
+    $pdo = dbConnexion();
+
+
+// verifier si l'email est utilisé ou non 
+$checkEmail = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+
+$checkEmail->execute([$email]);
+// une fonction pour verifier si je recupere quelque chose
+if ($checkEmail->rowcount() > 0){ 
+    $errors[] = "email deja validé";
+}else{
+    // dans le cas ou tout va bien 
+    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+// foncgion qui permet d'jouter une users a ma bdd
+    $insertUsers = $pdo->prepare("INSERT INTO users(username, email, password) VALUES (?, ?, ?)");
+    $insertUsers->execute([$username, $email, $hashPassword]);
+
+    echo "Utilisateur ajouté avec succés";
+
+}}}
 ?>
 
 
@@ -48,8 +70,9 @@ if (empty($name)) {
 <body>
     <section>
         <form action="" method="POST">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" required>
+        
+            <label for="username">Name</label>
+            <input type="text" name="username" id="username" required>
 
             <label for="email">Email</label>
             <input type="email" name="email" id="email" required>
@@ -57,17 +80,17 @@ if (empty($name)) {
             <label for="password">Password</label>
             <input type="password" name="password" id="password" required>
 
-            <label for="confirm password">Confirm Password</label>
+            <label for="confirmpassword">Confirm Password</label>
             <input type="password" name="confirmpassword" id="confirmpassword">
 
             <input type="submit" value="valider">
         </form>
             <?php foreach ($validmessage as $message){?>
             <span class="span"><?php echo $message ?></span>
+            <?php } ?>
 
         
     </section>
 </body>
 </html>
 <?php
-}; 
