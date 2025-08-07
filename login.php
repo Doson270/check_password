@@ -1,6 +1,7 @@
 <?php
 require_once "config/database.php";
-
+session_start();
+$message = "";
 $errors = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars(trim($_POST["username"] ?? ""));
@@ -16,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Une condition qui dit que si erreur est vide alors on ce connecte a la BDD
 
     if (empty($errors)) {
+        try { 
         // appelle de la fonction de connexion a la db 
         $pdo = dbconnexion();
         // prepare une requete sql username dynamique 
@@ -26,13 +28,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $request->execute([$username]);
         // recuperation des données 
         $user = $request->fetch();
-    }
+    
     // ensuite on recupere le password et on verifie sil est juste
     if ($user) {
         if (password_verify($password, $user["password"])) {
-            echo ("connexion reussi");
+            // recuperation de l'id de mon user 
+            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["username"] = $user["username"];
+            $_SESSION["user"] = $user["email"];
+            $_SESSION["login"] = true;
+
+            $message = "Bienvenue". htmlspecialchars($user['name']);
+            header("location:");
+        
+    }else {
+            $errors[] = "Compte introuvable";
         }
+    } else {
+            $errors[] = "Compte introuvable";
+        }
+    }catch (PDOExceptionv $e) {
+    $errors[] = "nous avons des probleme" . $e->getmessage();
     }
+}
 }
 
 ?>
@@ -55,6 +73,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" id="password" required>
 
             <input type="submit" value="valider">
+            <?php
+            if (!empty($errors)) {
+            foreach($errors as $error) {
+                echo $error;
+            }
+        }
+        ?>
         </form>
     </section>
 </body>
