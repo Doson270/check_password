@@ -1,3 +1,15 @@
+<?php   
+session_start();
+
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    header('location: login.php');
+    exit();
+}
+$user_id = $_SESSION['user_id'] ?? "inconnu";
+$username = $_SESSION['username'] ?? "non renseigné";
+$email = $_SESSION['email'] ?? "pas d'e-mail"
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +19,7 @@
 </head>
 <body>
     <h1>
-        Bienvenue
+        Bienvenue <?= $username ?>
     </h1>
     <a href="login.php">Deconnexion</a>
 </body>

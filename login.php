@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $message = "Bienvenue". htmlspecialchars($user['username']);
             header("location:welcome.php");
+            exit();
         
     }else {
             $errors[] = "Compte introuvable";
