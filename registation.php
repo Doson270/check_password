@@ -84,6 +84,8 @@ if ($checkEmail->rowcount() > 0){
             <input type="password" name="confirmpassword" id="confirmpassword">
 
             <input type="submit" value="valider">
+
+            <a href="login.php">J'ai deja un compte ?</a>
         </form>
             <?php foreach ($validmessage as $message){?>
             <span class="span"><?php echo $message ?></span>

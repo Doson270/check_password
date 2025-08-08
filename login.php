@@ -38,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user"] = $user["email"];
             $_SESSION["login"] = true;
 
-            $message = "Bienvenue". htmlspecialchars($user['name']);
-            header("location:");
+            $message = "Bienvenue". htmlspecialchars($user['username']);
+            header("location:welcome.php");
         
     }else {
             $errors[] = "Compte introuvable";
@@ -73,6 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" id="password" required>
 
             <input type="submit" value="valider">
+
+            <a href="registation.php">Je n'ai pas de compte</a>
             <?php
             if (!empty($errors)) {
             foreach($errors as $error) {

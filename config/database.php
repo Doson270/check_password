@@ -18,9 +18,6 @@ $password = "";
 $port = 3306;
 // encodage
 $charset = "utf8mb4";
-
-
-// transforme mes variables en global (accessible partout)    global $host, $dbname, $username, $password, $port, $charset;
 // je creer un try et un catch pour pouvoir tester ma ligne de code 
 // qui contient mes information pour pouvoir me connecter a ma BDD 
 // et si elle ne fonctionne pas on peut renvoyer une ligne de code sur pour pas que sa plant
@@ -29,7 +26,7 @@ $charset = "utf8mb4";
         $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset;port=$port";
         // je creer mon objet de connexion
         // Je creer un objet "pdo = newpdo" et je lui injecte les information
-        //  que je souhhaite et je lui modifie un attribut avec set attribut
+        //  que je souhaite et je lui modifie un attribut avec set attribut
         $pdo = new PDO($dsn, $username, $password);
         // comment recuperer les données
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
